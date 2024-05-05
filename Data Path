@@ -1,0 +1,34 @@
+Instruction processing consists of two phases: the fetch phase and the execution phase. It is
+convenient to divide the processor hardware into two corresponding sections. One section
+fetches instructions and the other executes them. The section that fetches instructions is also
+responsible for decoding them and for generating the control signals that cause appropriate
+actions to take place in the execution section. The execution section reads the data operands
+specified in an instruction, performs the required computations, and stores the results.
+The actions taken in each of the five stages are completed in one
+clock cycle. An instruction is fetched in step 1 by hardware stage 1 and placed into the IR.
+It is decoded, and its source registers are read in step 2. The information in the IR is used
+to generate the control signals for all subsequent steps. Therefore, the IR must continue to
+hold the instruction until its execution is completed.
+It is necessary to insert registers between stages. Inter-stage registers hold the results
+produced in one stage so that they can be used as inputs to the next stage during the next
+clock cycle. The hardware in the figure is often
+referred to as the datapath. It corresponds to stages 2 to 5. Data read from
+the register file are placed in registers RA and RB. Register RA provides the data to input
+InA of the ALU. Multiplexer MuxB forwards either the contents of RB or the immediate
+value in the IR to the ALU’s second input, InB. The ALU constitutes stage 3, and the result
+of the computation it performs is placed in register RZ.
+Recall that for computational instructions, such as an Add instruction, no processing
+actions take place in step 4. During that step, multiplexer MuxY in selects register
+RZ to transfer the result of the computation to RY. The contents of RY are transferred to the
+register file in step 5 and loaded into the destination register. For this reason, the register
+file is in both stages 2 and 5. It is a part of stage 2 because it contains the source registers
+and a part of stage 5 because it contains the destination register.
+For Load and Store instructions, the effective address of the memory operand is com-
+puted by the ALU in step 3 and loaded into register RZ. From there, it is sent to the memory,
+which is stage 4. In the case of a Load instruction, the data read from the memory are se-
+lected by multiplexer MuxY and placed in register RY, to be transferred to the register file
+in the next clock cycle. For a Store instruction, data are read from the register file, which is
+part of stage 2, and placed in register RB. Since memory access is done in stage 4, another
+inter-stage register is needed to maintain correct data flow in the multi-stage structure. Reg-
+ister RM is introduced for this purpose. The data to be stored are moved from RB to RM
+in step 3, and from there to the memory in step 4. No action is taken in step 5 in this case
