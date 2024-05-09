@@ -17,10 +17,8 @@ It is necessary to insert registers between stages. Inter-stage registers hold t
 produced in one stage so that they can be used as inputs to the next stage during the next
 clock cycle.
 
-The hardware in the figure is often
-referred to as the datapath. It corresponds to stages 2 to 5. Data read from
-the register file are placed in registers RA and RB. Register RA provides the data to input
-InA of the ALU.
+It corresponds to stages 2 to 5. Data read from the register file are placed in registers RA and RB.
+Register RA provides the data to input InA of the ALU.
 
 Multiplexer MuxB forwards either the contents of RB or the immediate
 value in the IR to the ALU’s second input, InB. The ALU constitutes stage 3, and the result
@@ -43,4 +41,20 @@ in the next clock cycle. For a Store instruction, data are read from the registe
 part of stage 2, and placed in register RB. Since memory access is done in stage 4, another
 inter-stage register is needed to maintain correct data flow in the multi-stage structure. Reg-
 ister RM is introduced for this purpose. The data to be stored are moved from RB to RM
-in step 3, and from there to the memory in step 4. No action is taken in step 5 in this case
+in step 3, and from there to the memory in step 4. No action is taken in step 5 in this case.
+
+INSTRUCTION FETCH SECTION:
+
+The organization of the instruction fetch section of the processor is illustrated in Figure 5.9.
+The addresses used to access the memory come from the PC when fetching instructions and
+from register RZ in the datapath when accessing instruction operands. Multiplexer MuxMA
+selects one of these two sources to be sent to the processor-memory interface. The PC is
+included in a larger block, the instruction address generator, which updates the contents of
+the PC after each instruction is fetched.
+
+The instruction read from the memory is loaded
+into the IR, where it stays until its execution is completed and the next instruction is fetched.
+The contents of the IR are examined by the control circuitry to generate the signals
+needed to control all the processor’s hardware. They are also used by the block labeled
+Immediate. As described in Chapter 2, an immediate value may be included in some
+instructions.
